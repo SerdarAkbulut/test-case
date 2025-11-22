@@ -21,7 +21,7 @@ function Elements({
     switch (type) {
       case "header":
         return (
-          <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold w-full h-[80px] absolute top-0">
+          <header className="bg-blue-600 text-white p-4 text-center text-2xl font-bold w-full h-[80px]  top-0">
             Header
           </header>
         );

@@ -15,7 +15,6 @@ export default function SidebarItem({
     setDragging(true);
     e.dataTransfer.setData("element-type", type);
 
-    // Drag preview için ghost image’ı kaldırıyoruz
     const img = new Image();
     img.src = "";
     e.dataTransfer.setDragImage(img, 0, 0);

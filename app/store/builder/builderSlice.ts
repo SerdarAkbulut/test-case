@@ -72,7 +72,7 @@ export const builderSlice = createSlice({
       state.elements.push({
         id: element.id,
         type: element.type,
-        text: element.text ?? {},
+        text: element.content ?? {},
         position: {
           x: element.x,
           y: element.y,

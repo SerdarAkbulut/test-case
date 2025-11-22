@@ -29,8 +29,8 @@ const Canvas = () => {
           type === "header" || type === "footer"
             ? { text: type.toUpperCase() }
             : { text: "Yeni Element" },
-        x,
-        y,
+        x: type === "header" ? "0" : type === "footer" ? "0" : x,
+        y: type === "header" ? 0 : type === "footer" ? canvas.height - 60 : y,
         width: type === "header" || type === "footer" ? "100%" : 200,
         height: type === "header" ? 80 : type === "footer" ? 60 : 120,
         zIndex: elements.length + 1,
