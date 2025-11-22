@@ -18,8 +18,8 @@ const Canvas = () => {
     const type = e.dataTransfer.getData("element-type");
     const rect = (e.target as HTMLDivElement).getBoundingClientRect();
 
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = e.clientX - rect.x;
+    const y = e.clientY - rect.y;
 
     dispatch(
       addElement({
