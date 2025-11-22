@@ -58,9 +58,10 @@ const Canvas = () => {
     >
       {elements.map((el) => (
         <Elements
+          id={el.id}
           key={el.id}
           type={el.type}
-          text={(el.text as { text: string }).text}
+          content={(el.content as { text: string }) ?? { text: "textt" }}
           x={el.position.x}
           y={el.position.y}
           width={el.position.width}

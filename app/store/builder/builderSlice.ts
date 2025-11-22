@@ -19,7 +19,7 @@ export interface BuilderState {
   elements: Array<{
     id: string;
     type: string;
-    text: string | Record<string, unknown>;
+    content: { text: string } | { object: string };
     position: {
       x: number | string;
       y: number | string;
@@ -72,7 +72,7 @@ export const builderSlice = createSlice({
       state.elements.push({
         id: element.id,
         type: element.type,
-        text: element.content ?? {},
+        content: element.content ?? {},
         position: {
           x: element.x,
           y: element.y,
@@ -112,6 +112,13 @@ export const builderSlice = createSlice({
       state.elements = state.elements.filter((e) => e.id !== id);
       state.metadata.totalElements = state.elements.length;
     },
+    updateElementText: (state, action) => {
+      const { id, content } = action.payload;
+      const element = state.elements.find((el) => el.id === id);
+      if (element) {
+        element.content = { ...element.content, ...content };
+      }
+    },
   },
 });
 
@@ -120,6 +127,7 @@ export const {
   updateElementPosition,
   updateElementSize,
   deleteElement,
+  updateElementText,
 } = builderSlice.actions;
 
 export default builderSlice.reducer;
