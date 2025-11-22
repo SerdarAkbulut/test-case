@@ -5,7 +5,9 @@ export default function Home() {
   return (
     <div className="flex w-full justify-between h-full">
       <Canvas />
-      <Sidebar />
+      <div>
+        <Sidebar />
+      </div>
     </div>
   );
 }
