@@ -3,6 +3,7 @@
 import { useDispatch } from "react-redux";
 import {
   deleteElement,
+  updateElementPosition,
   updateElementSize,
   updateElementText,
 } from "../store/builder/builderSlice";
@@ -31,14 +32,44 @@ function Elements({
   const [isEditing, setIsEditing] = useState(false);
   const [tempText, setTempText] = useState(content?.text);
   const [resizing, setResizing] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const [start, setStart] = useState({
     mouseX: 0,
     mouseY: 0,
     width: 0,
     height: 0,
+    x: 0,
+    y: 0,
   });
   const [aspectRatio, setAspectRatio] = useState(1);
 
+  const onDragStart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDragging(true);
+    setStart({
+      mouseX: e.clientX,
+      mouseY: e.clientY,
+      width: Number(width),
+      height: Number(height),
+      x: Number(x),
+      y: Number(y),
+    });
+  };
+  const onDragMove = (e: MouseEvent) => {
+    if (!dragging) return;
+
+    const deltaX = e.clientX - start.mouseX;
+    const deltaY = e.clientY - start.mouseY;
+
+    dispatch(
+      updateElementPosition({
+        id,
+        x: start.x + deltaX,
+        y: start.y + deltaY,
+      })
+    );
+  };
+  const onDragEnd = () => setDragging(false);
   // Resize Başlat
   const onResizeStart = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -48,6 +79,8 @@ function Elements({
       mouseY: e.clientY,
       width: Number(width),
       height: Number(height),
+      x: Number(x),
+      y: Number(y),
     });
     setAspectRatio(Number(width) / Number(height));
   };
@@ -92,15 +125,20 @@ function Elements({
   const onResizeEnd = () => setResizing(false);
 
   useEffect(() => {
+    window.addEventListener("mousemove", onDragMove);
+    window.addEventListener("mouseup", onDragEnd);
+
     window.addEventListener("mousemove", onResizeMove);
     window.addEventListener("mouseup", onResizeEnd);
 
     return () => {
+      window.removeEventListener("mousemove", onDragMove);
+      window.removeEventListener("mouseup", onDragEnd);
+
       window.removeEventListener("mousemove", onResizeMove);
       window.removeEventListener("mouseup", onResizeEnd);
     };
-  });
-
+  }, [dragging, resizing]);
   const handleDelete = () => {
     dispatch(deleteElement(id));
   };
@@ -132,6 +170,12 @@ function Elements({
           <div className="border rounded shadow p-4 relative bg-white h-full w-full">
             <div className="absolute top-2 right-2 flex gap-2">
               <button
+                onMouseDown={onDragStart} // sadece bu buton ile drag
+                className="bg-yellow-500 text-white px-2 py-1 text-xs rounded cursor-grab"
+              >
+                Taşı
+              </button>
+              <button
                 onClick={() => setIsEditing(true)}
                 className="bg-blue-600 text-white px-2 py-1 text-xs rounded"
               >
@@ -152,6 +196,12 @@ function Elements({
         return (
           <div className="relative p-1 h-full w-full border bg-white">
             <div className="absolute -top-3 right-0 flex gap-2">
+              <button
+                onMouseDown={onDragStart} // sadece bu buton ile drag
+                className="bg-yellow-500 text-white px-2 py-1 text-xs rounded cursor-grab"
+              >
+                Taşı
+              </button>
               <button
                 onClick={() => setIsEditing(true)}
                 className="bg-blue-600 text-white px-2 py-1 text-xs rounded "
